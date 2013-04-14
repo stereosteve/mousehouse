@@ -1,3 +1,4 @@
 $(function() {
-  $('.mouseable').draggable();
+  $('.mouseable').draggable()
+  $('.mouseable').resizable()
 })
