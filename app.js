@@ -43,3 +43,16 @@ $('a').on('click', function(ev) {
     activeObject.css('z-index', ZMIN - 1).addClass('atBack');
   }
 });
+
+$body.dblclick(function(ev) {
+  var $obj = $("<div class='object'></div>");
+  $obj.css({
+    width: '100px',
+    height: '100px',
+    background: 'green',
+    left: ev.clientX,
+    top: ev.clientY,
+  });
+  $obj.draggable().resizable()
+  $body.append($obj);
+});
