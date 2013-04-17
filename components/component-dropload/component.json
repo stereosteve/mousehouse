@@ -1,0 +1,23 @@
+{
+  "name": "dropload",
+  "repo": "component/dropload",
+  "description": "drag and drop uploads",
+  "version": "0.1.1",
+  "keywords": [
+    "drag",
+    "drop",
+    "upload",
+    "file"
+  ],
+  "dependencies": {
+    "component/emitter": "*",
+    "component/classes": "*",
+    "component/upload": "*",
+    "component/events": "*"
+  },
+  "development": {},
+  "scripts": [
+    "index.js"
+  ],
+  "license": "MIT"
+}

@@ -6,9 +6,11 @@ var activeObject;
 $object.draggable().resizable()
 $menu.menu();
 
-$object.on('contextmenu', function(ev) {
+$body.on('contextmenu .object', function(ev) {
   if (ev.altKey || ev.ctrlKey || ev.metaKey) return true;
-  activeObject = $(ev.currentTarget);
+  activeObject = $(ev.target);
+  if (!activeObject.is('.object'))
+    activeObject = $(ev.target).parent('.object')
   $menu.show()
   $menu.css({
     top: ev.clientY + 'px',
@@ -42,6 +44,9 @@ $('a').on('click', function(ev) {
     $('.atBack').css('z-index', ZMIN).removeClass('atBack');
     activeObject.css('z-index', ZMIN - 1).addClass('atBack');
   }
+  if (action === 'delete') {
+    activeObject.remove();
+  }
 });
 
 $body.dblclick(function(ev) {
@@ -55,4 +60,29 @@ $body.dblclick(function(ev) {
   });
   $obj.draggable().resizable()
   $body.append($obj);
+});
+
+
+/// drop
+
+var dropAnywhere = require('drop-anywhere')
+  , file = require('file')
+
+var drop = dropAnywhere(function(err, drop){
+  var img = file(drop.item.file);
+  var isImg = img.is('image/*');
+  var reader = img.toDataURL(function(err, str){
+    if (err) throw err;
+    var img = document.createElement('img');
+    img.src = str;
+    img.height = 300;
+    var $obj = $("<div class='object'></div>");
+    $obj.css({
+      width: '100px',
+      height: '100px',
+    });
+    $obj.append(img);
+    $obj.draggable().resizable()
+    $body.append($obj);
+  });
 });

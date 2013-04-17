@@ -1,0 +1,11 @@
+{
+  "name": "mousehouse",
+  "dependencies": {
+    "component/file": "*",
+    "component/drop-anywhere": "*"
+  },
+  "main": "app.js",
+  "scripts": [
+    "app.js"
+  ]
+}
