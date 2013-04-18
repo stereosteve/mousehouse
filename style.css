@@ -2,10 +2,8 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #f7f7f7;
 }
 .object {
-  background: white;
   position: absolute;
   z-index: 1;
   -moz-user-select: none;
@@ -14,6 +12,10 @@ html, body {
   user-select: none;
   width: 100px;
   height: 100px;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
 }
 .object img {
   width: 100%;

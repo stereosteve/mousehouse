@@ -1,1 +1,5 @@
-http://stackoverflow.com/questions/7278409/html5-drag-and-drop-to-move-a-div-anywhere-on-the-screen
+A stupid drag and drop experiment.
+
+http://www.stereosteve.com/mousehouse/
+
+You can drop new images onto the page, move and resize them.
