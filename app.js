@@ -1,5 +1,3 @@
-/// drop
-
 var dropAnywhere = require('drop-anywhere')
   , file = require('file')
   , throttle = require('throttle')
@@ -14,18 +12,20 @@ var drop = dropAnywhere(function(err, drop){
   }
   var reader = img.toDataURL(function(err, str){
     if (err) throw err;
-    console.log(str);
-    document.body.style.backgroundImage = 'url(' + str + ')';
-    var img = new Image()
-    img.src = str;
-    img.onload = function() {
-      console.log(img.height);
-      console.log(img.width);
-    }
+    showImg(str);
   });
 });
 
 
-window.awesome = function() {
-  dom('img').addClass('awesome')
+
+function showImg(str) {
+  document.body.style.backgroundImage = 'url(' + str + ')';
+
+  // get dimensions
+  var img = new Image()
+  img.src = str;
+  img.onload = function() {
+    console.log(img.height);
+    console.log(img.width);
+  }
 }
