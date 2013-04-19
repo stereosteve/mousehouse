@@ -47,6 +47,7 @@ function Dropload(el) {
   this.events.bind('dragenter');
   this.events.bind('dragleave');
   this.events.bind('dragover');
+  this.ignored = {};
 }
 
 /**
@@ -54,6 +55,29 @@ function Dropload(el) {
  */
 
 Emitter(Dropload.prototype);
+
+/**
+ * Ignore `name`.
+ *
+ * @param {String} name
+ * @api private
+ */
+
+Dropload.prototype.ignore = function(name){
+  this.ignored[name] = true;
+};
+
+/**
+ * Check if `name` is ignored.
+ *
+ * @param {String} name
+ * @return {Boolean}
+ * @api private
+ */
+
+Dropload.prototype.ignoring = function(name){
+  return !! this.ignored[name];
+};
 
 /**
  * Unbind event handlers.
@@ -98,8 +122,38 @@ Dropload.prototype.ondrop = function(e){
   e.preventDefault();
   this.classes.remove('over');
   var items = e.dataTransfer.items;
-  if (items) this.drop(items);
-  this.upload(e.dataTransfer.files);
+  var files = e.dataTransfer.files;
+  if (items) this.directories(items);
+  if (items) this.items(items);
+  if (files) this.upload(files);
+  this.ignored = {};
+};
+
+/**
+ * Walk directories and upload files.
+ *
+ * Directories are considered "files",
+ * non-files return null for .webkitGetAsEntry()
+ * for example when dragging urls.
+ *
+ * @param {DataTransferItemList} items
+ * @api private
+ */
+
+Dropload.prototype.directories = function(items){
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+
+    if ('file' != item.kind) continue;
+
+    if (!item.webkitGetAsEntry) continue;
+    var entry = item.webkitGetAsEntry();
+
+    if (entry.isDirectory) {
+      this.ignore(entry.name);
+      this.walkEntry(entry);
+    }
+  }
 };
 
 /**
@@ -109,9 +163,39 @@ Dropload.prototype.ondrop = function(e){
  * @api private
  */
 
-Dropload.prototype.drop = function(items){
+Dropload.prototype.items = function(items){
   for (var i = 0; i < items.length; i++) {
-    this.dropItem(items[i]);
+    var item = items[i];
+    this.item(item);
+  }
+};
+
+/**
+ * Walk file entry recursively.
+ *
+ * @param {FileEntry} item
+ * @api private
+ */
+
+Dropload.prototype.walkEntry = function(item){
+  var self = this;
+
+  if (item.isFile) {
+    return item.file(function(file){
+      file.entry = item;
+      self.upload([file]);
+    });
+  }
+
+  if (item.isDirectory) {
+    var dir = item.createReader();
+    dir.readEntries(function(entries){
+      for (var i = 0; i < entries.length; i++) {
+        var name = entries[i].name;
+        if ('.' == name[0]) continue;
+        self.walkEntry(entries[i]);
+      }
+    })
   }
 };
 
@@ -122,7 +206,7 @@ Dropload.prototype.drop = function(items){
  * @api private
  */
 
-Dropload.prototype.dropItem = function(item){
+Dropload.prototype.item = function(item){
   var self = this;
   var type = typeMap[item.type];
   item.getAsString(function(str){
@@ -143,6 +227,8 @@ Dropload.prototype.dropItem = function(item){
 
 Dropload.prototype.upload = function(files){
   for (var i = 0; i < files.length; i++) {
-    this.emit('upload', new Upload(files[i]));
+    var file = files[i];
+    if (this.ignoring(file.name)) continue;
+    this.emit('upload', new Upload(file));
   }
 };
