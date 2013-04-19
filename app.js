@@ -5,14 +5,6 @@ var dropAnywhere = require('drop-anywhere')
   , throttle = require('throttle')
   , dom = require('dom')
 
-var centerVertically = function() {
-  dom('img').forEach(function(img) {
-    if (img.height < window.innerHeight) {
-      img.style.marginTop = (window.innerHeight / 2) - (img.height / 2) + 'px';
-    }
-  });
-};
-
 
 var drop = dropAnywhere(function(err, drop){
   var img = file(drop.item.file);
@@ -24,16 +16,15 @@ var drop = dropAnywhere(function(err, drop){
     if (err) throw err;
     console.log(str);
     document.body.style.backgroundImage = 'url(' + str + ')';
-    /*
-    var img = document.createElement('img');
+    var img = new Image()
     img.src = str;
-    document.body.appendChild(img)
-    setTimeout(centerVertically, 50);
-    */
+    img.onload = function() {
+      console.log(img.height);
+      console.log(img.width);
+    }
   });
 });
 
-window.onresize = centerVertically;
 
 window.awesome = function() {
   dom('img').addClass('awesome')
