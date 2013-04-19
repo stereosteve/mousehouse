@@ -2,6 +2,7 @@ var dropAnywhere = require('drop-anywhere')
   , file = require('file')
   , throttle = require('throttle')
   , dom = require('dom')
+  , request = require('superagent')
 
 
 var drop = dropAnywhere(function(err, drop){
@@ -20,6 +21,7 @@ var drop = dropAnywhere(function(err, drop){
 
 function showImg(str) {
   document.body.style.backgroundImage = 'url(' + str + ')';
+  images.push(str);
 
   // get dimensions
   var img = new Image()
@@ -29,3 +31,19 @@ function showImg(str) {
     console.log(img.width);
   }
 }
+
+
+// DEMO
+var images = [];
+var index = 0;
+request.get('demo.json', function(resp) {
+  images = resp.body;
+  showNext();
+});
+function showNext() {
+  var img = images[index];
+  showImg(img)
+  index += 1;
+  if (index === images.length) index = 0;
+}
+document.body.onclick = showNext;

@@ -1,6 +1,7 @@
 {
   "name": "mousehouse",
   "dependencies": {
+    "visionmedia/superagent": "*",
     "component/dom": "*",
     "component/throttle": "*",
     "component/file": "*",
