@@ -1,6 +1,8 @@
 {
   "name": "mousehouse",
   "dependencies": {
+    "component/dom": "*",
+    "component/throttle": "*",
     "component/file": "*",
     "component/drop-anywhere": "*"
   },
