@@ -1,0 +1,42 @@
+body {
+  width: 10000px;
+  height: 10000px;
+  background-image: url(background.png);
+}
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+#ScrollUp,
+#ScrollRight,
+#ScrollDown,
+#ScrollLeft {
+  z-index: 1;
+  position: fixed;
+  background: rgba(0,0,0,0.5);
+}
+
+#ScrollUp {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+}
+#ScrollDown {
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+}
+#ScrollLeft {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+}
+#ScrollRight {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+}
